@@ -130,6 +130,19 @@ public class ClickNavigationIngame implements Listener {
     public void reihe1(Player p, ItemStack itemStack) {
         if (p == null || itemStack == null) return;
         Inventory inventory = p.getOpenInventory().getTopInventory();
+        if (inventory.getItem(21) == null) {
+            p.sendMessage("Slot21 = Empty");
+        }
+        if (inventory.getItem(22) == null) {
+            p.sendMessage("Slot22 = Empty");
+        }
+        if (inventory.getItem(23) == null) {
+            p.sendMessage("Slot23 = Empty");
+        }
+        p.sendMessage("Material: " +itemStack.getType()+ ", DisplayName: " +itemStack.getItemMeta().displayName());
+        p.sendMessage("Material: " + Objects.requireNonNull(inventory.getItem(21)).getType()+ ", DisplayName: " + Objects.requireNonNull(inventory.getItem(21)).getItemMeta().displayName());
+        p.sendMessage("Material: " + Objects.requireNonNull(inventory.getItem(22)).getType()+ ", DisplayName: " + Objects.requireNonNull(inventory.getItem(22)).getItemMeta().displayName());
+        p.sendMessage("Material: " + Objects.requireNonNull(inventory.getItem(23)).getType()+ ", DisplayName: " + Objects.requireNonNull(inventory.getItem(23)).getItemMeta().displayName());
         if (inventory.getItem(21) == null || !(Objects.requireNonNull(inventory.getItem(21)).isSimilar(itemStack))) return;
         if (inventory.getItem(22) == null || !(Objects.requireNonNull(inventory.getItem(22)).isSimilar(itemStack))) return;
         if (inventory.getItem(23) == null || !(Objects.requireNonNull(inventory.getItem(23)).isSimilar(itemStack))) return;
