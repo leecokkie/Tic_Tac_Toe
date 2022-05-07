@@ -10,6 +10,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
@@ -130,13 +131,11 @@ public class ClickNavigationIngame implements Listener {
         if(p.getOpenInventory().getTopInventory().getItem(21) == null || p.getOpenInventory().getTopInventory().getItem(22) == null || p.getOpenInventory().getTopInventory().getItem(23) == null) {
             return;
         }
-        p.sendMessage(p.getOpenInventory().getTopInventory().getItem(21).getType().toString());
-        if(Objects.equals(p.getOpenInventory().getTopInventory().getItem(21), itemStack)) {
-            if(Objects.equals(p.getOpenInventory().getTopInventory().getItem(22), itemStack)) {
-                if(Objects.equals(p.getOpenInventory().getTopInventory().getItem(23), itemStack)) {
-                    win(p);
-                }
-            }
-        }
+        Inventory inventory = p.getOpenInventory().getTopInventory();
+        if (inventory.getItem(21) == null || !(Objects.requireNonNull(inventory.getItem(21)).isSimilar(itemStack))) return;
+        if (inventory.getItem(22) == null || !(Objects.requireNonNull(inventory.getItem(22)).isSimilar(itemStack))) return;
+        if (inventory.getItem(23) == null || !(Objects.requireNonNull(inventory.getItem(23)).isSimilar(itemStack))) return;
+            win(p);
+
     }
 }
