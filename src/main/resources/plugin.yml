@@ -1,0 +1,9 @@
+name: Tic_Tac_Toe
+version: '${project.version}'
+main: de.lecokkie.tic_tac_toe.Main
+api-version: 1.18
+commands:
+  setTicTacToe:
+  test:
+  accept:
+  deny:
