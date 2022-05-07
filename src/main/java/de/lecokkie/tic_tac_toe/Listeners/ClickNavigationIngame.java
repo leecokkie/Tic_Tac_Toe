@@ -128,9 +128,7 @@ public class ClickNavigationIngame implements Listener {
     }
 
     public void reihe1(Player p, ItemStack itemStack) {
-        if(p.getOpenInventory().getTopInventory().getItem(21) == null || p.getOpenInventory().getTopInventory().getItem(22) == null || p.getOpenInventory().getTopInventory().getItem(23) == null) {
-            return;
-        }
+        if (p == null || itemStack == null) return;
         Inventory inventory = p.getOpenInventory().getTopInventory();
         if (inventory.getItem(21) == null || !(Objects.requireNonNull(inventory.getItem(21)).isSimilar(itemStack))) return;
         if (inventory.getItem(22) == null || !(Objects.requireNonNull(inventory.getItem(22)).isSimilar(itemStack))) return;
