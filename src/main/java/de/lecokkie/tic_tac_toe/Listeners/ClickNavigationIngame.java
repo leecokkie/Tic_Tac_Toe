@@ -1,6 +1,7 @@
 package de.lecokkie.tic_tac_toe.Listeners;
 
 import de.lecokkie.tic_tac_toe.Commands.DenyDuellCommand;
+import de.lecokkie.tic_tac_toe.Main;
 import de.lecokkie.tic_tac_toe.util.FileManager;
 import net.kyori.adventure.text.Component;
 import net.md_5.bungee.api.chat.TextComponent;
@@ -13,6 +14,7 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -69,9 +71,6 @@ public class ClickNavigationIngame implements Listener {
 
             Material material = Material.valueOf(yamlConfiguration.getString("Material"));
 
-            if(material == null) {
-                return;
-            }
             ItemStack itemStack = new ItemStack(material);
             ItemMeta itemMeta = itemStack.getItemMeta();
 
@@ -119,34 +118,38 @@ public class ClickNavigationIngame implements Listener {
         itemStack.setItemMeta(itemMeta);
         itemStack2.setItemMeta(itemMeta2);
 
-        reihe1(p, itemStack);
-        reihe1(p2, itemStack2);
+        if (checkWinning(Objects.requireNonNull(p.getPlayer()), itemStack)) {
+            p.sendMessage("You have Won the Game.");
+        }
+        if (checkWinning(Objects.requireNonNull(p2.getPlayer()), itemStack2)) {
+            p2.sendMessage("You have Won the Game.");
+        }
     }
 
     public void win(Player p) {
         p.sendMessage("win");
     }
 
-    public void reihe1(Player p, ItemStack itemStack) {
-        if (p == null || itemStack == null) return;
-        Inventory inventory = p.getOpenInventory().getTopInventory();
-        if (inventory.getItem(21) == null) {
-            p.sendMessage("Slot21 = Empty");
-        }
-        if (inventory.getItem(22) == null) {
-            p.sendMessage("Slot22 = Empty");
-        }
-        if (inventory.getItem(23) == null) {
-            p.sendMessage("Slot23 = Empty");
-        }
-        p.sendMessage("Material: " +itemStack.getType()+ ", DisplayName: " +itemStack.getItemMeta().displayName());
-        p.sendMessage("Material: " + Objects.requireNonNull(inventory.getItem(21)).getType()+ ", DisplayName: " + Objects.requireNonNull(inventory.getItem(21)).getItemMeta().displayName());
-        p.sendMessage("Material: " + Objects.requireNonNull(inventory.getItem(22)).getType()+ ", DisplayName: " + Objects.requireNonNull(inventory.getItem(22)).getItemMeta().displayName());
-        p.sendMessage("Material: " + Objects.requireNonNull(inventory.getItem(23)).getType()+ ", DisplayName: " + Objects.requireNonNull(inventory.getItem(23)).getItemMeta().displayName());
-        if (inventory.getItem(21) == null || !(Objects.requireNonNull(inventory.getItem(21)).isSimilar(itemStack))) return;
-        if (inventory.getItem(22) == null || !(Objects.requireNonNull(inventory.getItem(22)).isSimilar(itemStack))) return;
-        if (inventory.getItem(23) == null || !(Objects.requireNonNull(inventory.getItem(23)).isSimilar(itemStack))) return;
-            win(p);
-
+    public Boolean checkWinning(Player player, ItemStack itemStack) {
+                Inventory inventory = player.getOpenInventory().getTopInventory();
+                ItemStack[] itemStacks = inventory.getContents();
+                int slotnumber = 0;
+                for (ItemStack items : itemStacks) {
+                    if (items != null && items.getType() != Material.AIR) {
+                        if (itemStacks[21].isSimilar(itemStack) && itemStacks[22].isSimilar(itemStack) && itemStacks[23].isSimilar(itemStack)) {
+                            win(player);
+                            return true;
+                        }
+                    }
+                    if (slotnumber == 21 ||slotnumber == 22 ||slotnumber == 23 ||slotnumber == 30 ||slotnumber == 31 ||slotnumber == 32 ||slotnumber == 39 ||slotnumber == 40 ||slotnumber == 41) {
+                        if (inventory.getItem(slotnumber) != null || Objects.requireNonNull(inventory.getItem(slotnumber)).getType() != Material.AIR) {
+                            Main.getPlugin().getLogger().info("Slot: " +slotnumber+ ", Item: " + Objects.requireNonNull(inventory.getItem(slotnumber)).getType());
+                        } else {
+                            Main.getPlugin().getLogger().info("Slot: " + slotnumber + ", Item: Null");
+                        }
+                    }
+                    slotnumber++;
+                }
+                return false;
+            }
     }
-}
